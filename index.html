@@ -318,6 +318,13 @@ const { useState, useEffect, useMemo, useCallback } = React;
 const DATA_URL = "propostas.json";
 
 /* ================================================================
+   CONFIGURAÇÃO — endereço da Planilha (via Google Apps Script)
+   onde as avaliações são gravadas. Siga o guia em apps_script.gs
+   para criar e publicar, depois cole a URL abaixo (termina em /exec).
+   ================================================================ */
+const SHEETS_URL = "https://script.google.com/macros/s/AKfycbzB-sFHT1VCg_QH0PYwoHR7TL7aDj-EZHXqO3Tlc43BIw8BQr4s0Vabcx8iehUjb0_v/exec";
+
+/* ================================================================
    CONFIGURAÇÃO — usuários com acesso (login simples, e-mail + senha)
    IMPORTANTE: isto é uma barreira de cortesia, não segurança real —
    qualquer pessoa que abrir "Ver código-fonte" desta página vê essa
@@ -325,9 +332,9 @@ const DATA_URL = "propostas.json";
    copie uma linha e edite email/senha/nome.
    ================================================================ */
 const USERS = [
-  { email: "teste", password: "tech26", name: "teste" },
-  { email: "avaliador1@gmail.com", password: "tech26", name: "Avaliador 1" },
+  { email: "avaliador1@sc.gov.br", password: "tech26", name: "Avaliador 1" },
   { email: "avaliador2@sc.gov.br", password: "tech26", name: "Avaliador 2" },
+  { email: "avaliador3@sc.gov.br", password: "tech26", name: "Avaliador 3" },
 ];
 
 const TECH_CRITERIA = [
@@ -406,15 +413,58 @@ function defaultScores(criteria) {
   return o;
 }
 
-/* ============ STORAGE HELPERS ============ */
-async function storageGet(key) {
+/* ============ PLANILHA (GOOGLE SHEETS) HELPERS ============ */
+// Busca todas as linhas da planilha e remonta o formato
+// { proposalId: { evaluatorName: { tech, pol, org, ts } } } usado pela UI.
+async function fetchAllEvaluations() {
+  const isConfigured = SHEETS_URL.startsWith("http");
+  if (!isConfigured) return { data: {}, error: "not_configured" };
   try {
-    const r = await window.storage.get(key, true);
-    return r ? JSON.parse(r.value) : null;
-  } catch (e) { return null; }
+    const res = await fetch(SHEETS_URL);
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const rows = await res.json();
+    const result = {};
+    rows.forEach(row => {
+      if (!row.proposal_id || !row.evaluator_name) return;
+      if (!result[row.proposal_id]) result[row.proposal_id] = {};
+      let tech = {}, pol = {};
+      try { tech = JSON.parse(row.tech_scores || "{}"); } catch (e) {}
+      try { pol = JSON.parse(row.pol_scores || "{}"); } catch (e) {}
+      result[row.proposal_id][row.evaluator_name] = {
+        tech, pol, org: row.evaluator_org || null, ts: row.updated_at,
+      };
+    });
+    return { data: result, error: null };
+  } catch (e) {
+    return { data: {}, error: e.message || "Falha ao ler a planilha." };
+  }
 }
-async function storageSet(key, value) {
-  try { await window.storage.set(key, JSON.stringify(value), true); } catch (e) { console.error(e); }
+
+// Grava (ou atualiza) a avaliação de UM avaliador para UMA proposta.
+async function upsertEvaluation({ proposalId, proposalTitulo, evaluatorName, evaluatorOrg, tech, pol }) {
+  const isConfigured = SHEETS_URL.startsWith("http");
+  if (!isConfigured) return { error: "not_configured" };
+  try {
+    const res = await fetch(SHEETS_URL, {
+      method: "POST",
+      // Content-Type "text/plain" evita que o navegador dispare uma
+      // requisição de pré-checagem CORS (OPTIONS), que o Apps Script não trata.
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({
+        proposal_id: proposalId,
+        proposal_titulo: proposalTitulo,
+        evaluator_name: evaluatorName,
+        evaluator_org: evaluatorOrg || "",
+        tech_scores: JSON.stringify(tech),
+        pol_scores: JSON.stringify(pol),
+        updated_at: new Date().toISOString(),
+      }),
+    });
+    const json = await res.json();
+    return { error: json.ok ? null : (json.error || "Erro ao salvar.") };
+  } catch (e) {
+    return { error: e.message || "Falha ao gravar na planilha." };
+  }
 }
 
 /* Busca as propostas do arquivo propostas.json em vez de tê-las fixas no código. */
@@ -432,6 +482,7 @@ async function fetchProposals() {
 function App({ loggedUser, onLogout }) {
   const [ready, setReady] = useState(false);
   const [dataError, setDataError] = useState(null);
+  const [evalError, setEvalError] = useState(null);
   const [PROPOSALS, setPROPOSALS] = useState([]);
   const [tab, setTab] = useState("avaliar"); // avaliar | rank
   const [orgInput, setOrgInput] = useState("");
@@ -445,11 +496,12 @@ function App({ loggedUser, onLogout }) {
 
   useEffect(() => {
     (async () => {
-      const [evalData, propsResult] = await Promise.all([
-        storageGet("avsc:evaluations"),
+      const [evalResult, propsResult] = await Promise.all([
+        fetchAllEvaluations(),
         fetchProposals(),
       ]);
-      setAllEvals(evalData || {});
+      setAllEvals(evalResult.data || {});
+      setEvalError(evalResult.error);
       setPROPOSALS(propsResult.data || []);
       setDataError(propsResult.error);
       setReady(true);
@@ -499,6 +551,13 @@ function App({ loggedUser, onLogout }) {
   async function saveAndNext() {
     setSaving(true);
     const pid = proposal.id;
+    const { error } = await upsertEvaluation({
+      proposalId: pid, proposalTitulo: proposal.titulo,
+      evaluatorName, evaluatorOrg: orgInput, tech: techVals, pol: polVals,
+    });
+    if (error) { setEvalError(error); setSaving(false); return; }
+    setEvalError(null);
+
     const updated = { ...allEvals };
     updated[pid] = { ...(updated[pid] || {}) };
     updated[pid][evaluatorName] = {
@@ -506,7 +565,6 @@ function App({ loggedUser, onLogout }) {
       org: orgInput || null,
       ts: new Date().toISOString(),
     };
-    await storageSet("avsc:evaluations", updated);
     setAllEvals(updated);
 
     // find next pending for this evaluator
@@ -591,6 +649,19 @@ function App({ loggedUser, onLogout }) {
         <div className="avsc-connbanner">
           <b>Não foi possível carregar as propostas.</b> Confira se o arquivo propostas.json está na
           mesma pasta deste index.html no repositório. Detalhe técnico: {dataError}
+        </div>
+      )}
+
+      {evalError === "not_configured" && (
+        <div className="avsc-connbanner">
+          <b>Planilha de avaliações não configurada.</b> Edite o index.html e preencha SHEETS_URL
+          no topo do bloco &lt;script&gt; com a URL do seu Apps Script (veja apps_script.gs).
+          Até lá, as notas não serão salvas entre sessões.
+        </div>
+      )}
+      {evalError && evalError !== "not_configured" && (
+        <div className="avsc-connbanner">
+          <b>Não foi possível salvar/carregar as avaliações.</b> Detalhe técnico: {evalError}
         </div>
       )}
 
