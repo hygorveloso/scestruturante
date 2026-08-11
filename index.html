@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Avaliação de Propostas Estruturantes — AVANÇA SC</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+  #avsc-root, #avsc-root * { box-sizing: border-box; }
+  #avsc-root {
+    --paper: #F5F2E9;
+    --ink: #1C2B22;
+    --ink-soft: #5B6459;
+    --panel: #FFFFFF;
+    --line: #E1DCC8;
+    --green: #2F6B44;
+    --green-soft: #E3EEE3;
+    --gold: #96762C;
+    --gold-soft: #F1E8D2;
+    --red: #A23B32;
+    --red-soft: #F5E2DF;
+    --amber: #B08A2E;
+    --amber-soft: #F3ECD8;
+    --navy: #1F3A5A;
+    font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 0;
+    position: relative;
+  }
+  #avsc-root .serif { font-family: 'Fraunces', Georgia, serif; }
+
+  /* ---------- shell ---------- */
+  .avsc-shell { max-width: 1180px; margin: 0 auto; padding: 22px 24px 80px; }
+  .avsc-topbar {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    padding-bottom: 16px; margin-bottom: 0; flex-wrap: wrap; gap: 18px;
+  }
+  .avsc-brand { display: flex; align-items: center; gap: 10px; padding-top: 4px; }
+  .avsc-brand .mark {
+    font-family: 'Fraunces', serif; font-weight: 600; font-size: 13px;
+    letter-spacing: .12em; text-transform: uppercase; color: var(--green);
+    border: 1px solid var(--green); padding: 5px 9px; border-radius: 4px;
+  }
+  .avsc-brand h1 { font-size: 20px; margin: 0; font-weight: 600; }
+  .avsc-brand .sub { font-size: 12px; color: var(--ink-soft); margin-top: 2px; }
+
+  .avsc-id-box { display: flex; gap: 14px; flex-wrap: wrap; }
+  .avsc-id-field { min-width: 190px; }
+  .avsc-id-field label {
+    display: block; font-size: 10.5px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .04em; margin-bottom: 5px; color: var(--ink);
+  }
+  .avsc-id-field input {
+    width: 100%; padding: 8px 11px; border: 1px solid var(--line); border-radius: 6px;
+    font-size: 13px; font-family: inherit; background: #FCFBF7; color: var(--ink);
+  }
+  .avsc-id-field input::placeholder { color: #A7AC9B; }
+  .avsc-id-field input:focus { outline: 2px solid var(--green); outline-offset: 1px; border-color: var(--green); }
+  .avsc-id-field input.warn { border-color: var(--red); }
+  .avsc-id-warn { font-size: 10.5px; color: var(--red); margin-top: 4px; }
+
+  .avsc-hr { border: none; border-top: 2px solid var(--ink); margin: 16px 0 22px; }
+
+  .avsc-connbanner {
+    background: var(--red-soft); border: 1px solid var(--red); color: var(--red);
+    border-radius: 8px; padding: 12px 16px; font-size: 12.5px; line-height: 1.5; margin-bottom: 18px;
+  }
+  .avsc-connbanner b { font-weight: 800; }
+
+  /* single content box */
+  .avsc-box {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+    padding: 26px 28px 30px; min-height: 60vh;
+  }
+  .avsc-box-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 10px; }
+
+  .avsc-tabs { display: flex; gap: 6px; }
+  .avsc-tab {
+    font-size: 12.5px; padding: 7px 13px; border: 1px solid var(--line); background: var(--paper);
+    cursor: pointer; border-radius: 6px; color: var(--ink-soft); font-weight: 700;
+  }
+  .avsc-tab.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+  .avsc-field { margin-bottom: 14px; }
+  .avsc-field label { display: block; font-size: 12px; font-weight: 700; margin-bottom: 5px; color: var(--ink); }
+  .avsc-field input, .avsc-field select {
+    width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 6px;
+    font-size: 14px; font-family: inherit; background: #FCFBF7;
+  }
+  .avsc-field input:focus, .avsc-field select:focus { outline: 2px solid var(--green); outline-offset: 1px; border-color: var(--green); }
+  .avsc-btn {
+    display: inline-flex; align-items: center; gap: 8px; background: var(--green); color: #fff;
+    border: none; padding: 12px 20px; border-radius: 6px; font-size: 14px; font-weight: 700;
+    cursor: pointer; font-family: inherit;
+  }
+  .avsc-btn:hover { background: #275838; }
+  .avsc-btn:disabled { background: #B9C4BA; cursor: not-allowed; }
+  .avsc-btn.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+  .avsc-btn.ghost:hover { border-color: var(--ink); }
+  .avsc-btn.wide { width: 100%; justify-content: center; }
+
+  /* ---------- progress ---------- */
+  .avsc-progress-wrap { margin-bottom: 20px; }
+  .avsc-progress-top { display: flex; justify-content: space-between; font-size: 12px; color: var(--ink-soft); margin-bottom: 6px; }
+  .avsc-progress-bar { height: 6px; background: var(--line); border-radius: 4px; overflow: hidden; }
+  .avsc-progress-fill { height: 100%; background: var(--green); transition: width .4s ease; }
+  .avsc-dots { display: flex; gap: 5px; margin-top: 10px; flex-wrap: wrap; }
+  .avsc-dot {
+    width: 26px; height: 26px; border-radius: 5px; border: 1px solid var(--line); background: var(--panel);
+    font-size: 11px; display: flex; align-items: center; justify-content: center; cursor: pointer;
+    color: var(--ink-soft); font-weight: 700;
+  }
+  .avsc-dot.done { background: var(--green-soft); border-color: var(--green); color: var(--green); }
+  .avsc-dot.current { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+  /* ---------- evaluation layout ---------- */
+  .avsc-eval-grid { display: grid; grid-template-columns: 1.55fr 1fr; gap: 28px; align-items: start; }
+  @media (max-width: 880px) { .avsc-eval-grid { grid-template-columns: 1fr; } }
+
+  .avsc-dossier { border-right: 1px solid var(--line); padding-right: 4px; }
+  @media (max-width: 880px) { .avsc-dossier { border-right: none; } }
+  .avsc-dossier-head { padding: 0 0 16px; border-bottom: 1px solid var(--line); position: relative; margin-bottom: 4px; }
+  .avsc-dossier-head .num { font-family: 'Fraunces', serif; font-size: 12px; color: var(--ink-soft); letter-spacing: .06em; }
+  .avsc-dossier-head h2 { font-family: 'Fraunces', serif; font-size: 22px; margin: 4px 0 10px; line-height: 1.28; }
+  .avsc-meta-row { display: flex; gap: 16px; flex-wrap: wrap; font-size: 12px; color: var(--ink-soft); }
+  .avsc-meta-row span b { color: var(--ink); font-weight: 700; }
+  .avsc-pill {
+    display: inline-block; font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 20px;
+    background: var(--navy); color: #fff;
+  }
+
+  .avsc-canvas { padding: 6px 22px 4px 0; }
+  .avsc-block { padding: 16px 0; border-bottom: 1px dashed var(--line); }
+  .avsc-block:last-child { border-bottom: none; }
+  .avsc-block-head { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .avsc-block-num {
+    width: 20px; height: 20px; border-radius: 4px; background: var(--green-soft); color: var(--green);
+    font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .avsc-block-num.pol { background: var(--gold-soft); color: var(--gold); }
+  .avsc-block-title { font-size: 12.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--ink); }
+  .avsc-block-text { font-size: 13.5px; line-height: 1.55; color: #303B31; margin: 0; padding-left: 28px; }
+  .avsc-section-label {
+    font-family: 'Fraunces', serif; font-size: 12px; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--gold); margin: 22px 0 4px; font-weight: 600;
+  }
+
+  /* ---------- scoring panel ---------- */
+  .avsc-score-panel { position: sticky; top: 16px; display: flex; flex-direction: column; gap: 14px; }
+  .avsc-card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px; }
+  .avsc-card h3 { font-family: 'Fraunces', serif; font-size: 14px; margin: 0 0 4px; }
+  .avsc-card .card-sub { font-size: 11.5px; color: var(--ink-soft); margin: 0 0 14px; }
+
+  .avsc-crit { margin-bottom: 16px; }
+  .avsc-crit:last-child { margin-bottom: 0; }
+  .avsc-crit-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 5px; }
+  .avsc-crit-name { font-size: 12.5px; font-weight: 700; }
+  .avsc-crit-weight { font-size: 10.5px; color: var(--ink-soft); }
+  .avsc-crit-row { display: flex; align-items: center; gap: 10px; }
+  .avsc-crit input[type=range] { flex: 1; accent-color: var(--green); }
+  .avsc-crit-val {
+    width: 30px; text-align: center; font-weight: 800; font-size: 13px; font-family: 'Fraunces', serif;
+  }
+  .avsc-crit-zone { font-size: 10px; text-transform: uppercase; letter-spacing: .05em; font-weight: 700; margin-top: 3px; }
+  .avsc-crit-zone.baixa { color: var(--red); }
+  .avsc-crit-zone.media { color: var(--amber); }
+  .avsc-crit-zone.alta { color: var(--green); }
+
+  .avsc-tech .avsc-crit input[type=range] { accent-color: var(--green); }
+  .avsc-pol .avsc-crit input[type=range] { accent-color: var(--gold); }
+
+  /* stamp */
+  .avsc-stamp-card { text-align: center; padding: 20px; }
+  .avsc-stamp {
+    display: inline-block; border: 3px solid var(--ink); border-radius: 8px; padding: 10px 22px;
+    transform: rotate(-3deg); font-family: 'Fraunces', serif; font-weight: 700;
+  }
+  .avsc-stamp.alta { border-color: var(--green); color: var(--green); }
+  .avsc-stamp.media { border-color: var(--amber); color: var(--amber); }
+  .avsc-stamp.baixa { border-color: var(--red); color: var(--red); }
+  .avsc-stamp .label { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; display: block; }
+  .avsc-stamp .val { font-size: 26px; display: block; }
+  .avsc-formula { font-size: 11px; color: var(--ink-soft); margin-top: 10px; }
+  .avsc-subscores { display: flex; justify-content: center; gap: 18px; margin-top: 12px; font-size: 12px; }
+  .avsc-subscores div b { display: block; font-family: 'Fraunces', serif; font-size: 17px; }
+
+  .avsc-save-bar { display: flex; gap: 10px; }
+
+  /* ---------- ranking view ---------- */
+  .avsc-rank-table { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+  .avsc-rank-table th, .avsc-rank-table td { padding: 12px 14px; text-align: left; font-size: 12.5px; border-bottom: 1px solid var(--line); }
+  .avsc-rank-table th { background: var(--ink); color: var(--paper); font-size: 11px; text-transform: uppercase; letter-spacing: .04em; }
+  .avsc-rank-table tr:last-child td { border-bottom: none; }
+  .avsc-badge { font-size: 10.5px; font-weight: 800; padding: 3px 9px; border-radius: 20px; text-transform: uppercase; }
+  .avsc-badge.alta { background: var(--green-soft); color: var(--green); }
+  .avsc-badge.media { background: var(--amber-soft); color: var(--amber); }
+  .avsc-badge.baixa { background: var(--red-soft); color: var(--red); }
+  .avsc-badge.pendente { background: var(--line); color: var(--ink-soft); }
+  .avsc-empty-note { font-size: 12px; color: var(--ink-soft); padding: 30px; text-align: center; }
+
+  .avsc-done-screen { text-align: center; padding: 60px 20px; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; }
+  .avsc-done-screen .big { font-family: 'Fraunces', serif; font-size: 30px; margin-bottom: 8px; }
+  .avsc-done-screen p { color: var(--ink-soft); font-size: 14px; margin-bottom: 22px; }
+
+  /* ---------- V2: canvas grid (fiel ao layout original) ---------- */
+  .avsc-canvas-title { display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px; }
+  .avsc-canvas-title h3 { font-family: 'Fraunces', serif; font-size: 17px; margin: 0; }
+  .avsc-canvas-title .tag { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-soft); font-weight: 700; }
+  .avsc-canvas-sub { font-size: 12px; color: var(--ink-soft); margin: 0 0 14px; }
+
+  .avsc-canvasgrid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 26px; }
+  @media (max-width: 1080px) { .avsc-canvasgrid { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 680px) { .avsc-canvasgrid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 460px) { .avsc-canvasgrid { grid-template-columns: 1fr; } }
+
+  .avsc-polgrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  @media (max-width: 780px) { .avsc-polgrid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 460px) { .avsc-polgrid { grid-template-columns: 1fr; } }
+
+  .avsc-tile {
+    border-radius: 10px; overflow: hidden; border: 1px solid var(--line); background: #fff;
+    display: flex; flex-direction: column;
+  }
+  .avsc-tile-head { padding: 11px 12px 9px; color: #fff; }
+  .avsc-tile-num {
+    width: 24px; height: 24px; border-radius: 6px; background: rgba(255,255,255,.24);
+    display: flex; align-items: center; justify-content: center; font-weight: 800;
+    font-family: 'Fraunces', serif; font-size: 12.5px; margin-bottom: 7px;
+  }
+  .avsc-tile-title { font-size: 11.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .03em; line-height: 1.28; }
+  .avsc-tile-body { padding: 10px 12px 12px; flex: 1; display: flex; flex-direction: column; gap: 8px; }
+  .avsc-tile-q { font-size: 10.5px; color: var(--ink-soft); font-style: italic; line-height: 1.35; margin: 0; }
+  .avsc-tile-text { font-size: 11.5px; line-height: 1.5; color: #303B31; flex: 1; margin: 0; }
+  .avsc-tile-classify { border-top: 1px dashed var(--line); padding-top: 9px; margin-top: auto; }
+  .avsc-tile-classify-top { display: flex; justify-content: space-between; margin-bottom: 6px; }
+  .avsc-tile-classify-label { font-size: 9px; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-soft); font-weight: 700; }
+  .avsc-tile-weight { font-size: 9px; color: var(--ink-soft); font-weight: 700; }
+  .avsc-chip-row { display: flex; gap: 5px; }
+  .avsc-chip {
+    flex: 1; text-align: center; font-size: 9.5px; font-weight: 800; padding: 6px 0; border-radius: 5px;
+    border: 1px solid var(--line); cursor: pointer; background: #FBFAF6; color: var(--ink-soft);
+  }
+  .avsc-chip:hover { border-color: var(--ink-soft); }
+  .avsc-chip.selected.baixa { background: var(--red); border-color: var(--red); color: #fff; }
+  .avsc-chip.selected.media { background: var(--amber); border-color: var(--amber); color: #fff; }
+  .avsc-chip.selected.alta { background: var(--green); border-color: var(--green); color: #fff; }
+  .avsc-tile-noscore {
+    font-size: 9.5px; color: var(--ink-soft); font-style: italic; padding-top: 9px;
+    border-top: 1px dashed var(--line); margin-top: auto;
+  }
+
+  .avsc-scorebar {
+    position: sticky; bottom: 14px; margin-top: 22px; background: var(--ink); color: var(--paper);
+    border-radius: 10px; padding: 14px 22px; display: flex; align-items: center; justify-content: space-between;
+    gap: 18px; flex-wrap: wrap; box-shadow: 0 6px 18px rgba(28,43,34,.25);
+  }
+  .avsc-scorebar .scores { display: flex; gap: 24px; align-items: center; }
+  .avsc-scorebar .scores > div { text-align: center; }
+  .avsc-scorebar .scores b { display: block; font-family: 'Fraunces', serif; font-size: 19px; }
+  .avsc-scorebar .scores span.lbl { font-size: 10px; text-transform: uppercase; letter-spacing: .04em; opacity: .7; }
+  .avsc-stamp-mini {
+    padding: 5px 13px; border-radius: 20px; font-weight: 800; font-size: 11px; text-transform: uppercase;
+    letter-spacing: .03em;
+  }
+  .avsc-stamp-mini.alta { background: var(--green); color: #fff; }
+  .avsc-stamp-mini.media { background: var(--amber); color: #1C2B22; }
+  .avsc-stamp-mini.baixa { background: var(--red); color: #fff; }
+  .avsc-scorebar-actions { display: flex; align-items: center; gap: 14px; }
+  .avsc-scorebar button.savebtn {
+    background: #fff; color: var(--ink); border: none; padding: 11px 20px; border-radius: 6px;
+    font-weight: 800; cursor: pointer; font-family: inherit; font-size: 13px;
+  }
+  .avsc-scorebar button.savebtn:disabled { opacity: .6; cursor: not-allowed; }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div id="avsc-root"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+
+<script type="text/babel" data-presets="react">
+const { useState, useEffect, useMemo, useCallback } = React;
+
+/* ================================================================
+   CONFIGURAÇÃO — arquivo de dados das propostas
+   O nome abaixo aponta para o arquivo propostas.json que deve estar
+   NA MESMA PASTA deste index.html, no repositório do GitHub.
+   Pode renomear o arquivo (ex: "dados-x7f2.json") para dificultar
+   achar por acaso — só troque o nome nas duas pontas.
+   ================================================================ */
+const DATA_URL = "propostas.json";
+
+const TECH_CRITERIA = [
+  { key: "beneficiarios", label: "Beneficiários Estratégicos", weight: 20 },
+  { key: "impacto", label: "Impacto Esperado", weight: 20 },
+  { key: "desafio", label: "Desafio Estrutural", weight: 15 },
+  { key: "iniciativa", label: "Iniciativa Estruturante", weight: 15 },
+  { key: "maturidade", label: "Maturidade e Viabilidade", weight: 15 },
+  { key: "legado", label: "Legado Intergeracional", weight: 10 },
+  { key: "resiliencia", label: "Resiliência e Sustentabilidade", weight: 5 },
+];
+const POL_CRITERIA = [
+  { key: "aprovacaoPopular", label: "Potencial de Aprovação Popular", weight: 40 },
+  { key: "visibilidade", label: "Visibilidade Pública", weight: 30 },
+  { key: "alcancePopulacional", label: "Alcance Populacional", weight: 20 },
+  { key: "alcanceTerritorial", label: "Alcance Territorial", weight: 10 },
+];
+
+const CANVAS_LABELS = [
+  ["desafio", "1. Desafio Estrutural", "tech"],
+  ["visao", "2. Visão de Futuro", "tech"],
+  ["iniciativa", "3. Iniciativa Estruturante", "tech"],
+  ["impacto", "4. Impacto Esperado", "tech"],
+  ["transversalidade", "5. Transversalidade Governamental", "tech"],
+  ["beneficiarios", "6. Beneficiários Estratégicos", "tech"],
+  ["maturidade", "7. Maturidade e Viabilidade", "tech"],
+  ["resiliencia", "8. Resiliência e Sustentabilidade", "tech"],
+  ["legado", "10. Legado e Transformação Intergeracional", "tech"],
+];
+const POL_LABELS = [
+  ["aprovacaoPopular", "1. Potencial de Aprovação Popular"],
+  ["visibilidade", "2. Visibilidade Pública"],
+  ["alcancePopulacional", "3. Alcance Populacional"],
+  ["alcanceTerritorial", "4. Alcance Territorial"],
+];
+
+/* ---------- V2: grid fiel ao Canvas original, com cor/pergunta/peso por bloco (na ordem 1-10) ---------- */
+const CANVAS_TILES = [
+  { num: 1, key: "desafio", title: "Desafio Estrutural", question: "Qual problema estrutural precisa ser transformado?", color: "#1F3A5A", scored: true },
+  { num: 2, key: "visao", title: "Visão de Futuro", question: "Como Santa Catarina deve estar posicionada nos próximos 10 a 20 anos?", color: "#3E7C4A", scored: false },
+  { num: 3, key: "iniciativa", title: "Iniciativa Estruturante", question: "Qual iniciativa pode gerar transformação e legado?", color: "#A23B32", scored: true },
+  { num: 4, key: "impacto", title: "Impacto Esperado", question: "Quais transformações concretas serão geradas?", color: "#2E5FA3", scored: true },
+  { num: 5, key: "transversalidade", title: "Transversalidade Governamental", question: "Quais áreas de governo precisam atuar conjuntamente?", color: "#6B4FA0", scored: false },
+  { num: 6, key: "beneficiarios", title: "Beneficiários Estratégicos", question: "Quem será impactado pela iniciativa?", color: "#96762C", scored: true },
+  { num: 7, key: "maturidade", title: "Maturidade e Viabilidade", question: "A iniciativa possui condições reais de implementação?", color: "#2E5FA3", scored: true },
+  { num: 8, key: "resiliencia", title: "Resiliência e Sustentabilidade", question: "A iniciativa contribui para preparar o Estado para o futuro?", color: "#3E7C4A", scored: true },
+  { num: 9, key: "__horizonte", title: "Horizonte Temporal", question: "Quando os resultados poderão ser percebidos?", color: "#5B6459", scored: false },
+  { num: 10, key: "legado", title: "Legado e Transformação Intergeracional", question: "Que transformação permanecerá para os próximos anos?", color: "#6B4FA0", scored: true },
+];
+const POL_TILES = [
+  { num: 1, key: "aprovacaoPopular", title: "Potencial de Aprovação Popular", question: "Qual o potencial da iniciativa ser bem recebida e aprovada pela população?", color: "#1F3A5A" },
+  { num: 2, key: "visibilidade", title: "Visibilidade Pública", question: "Avalie o grau de visibilidade da iniciativa e sua capacidade de gerar percepção positiva na sociedade.", color: "#2E5FA3" },
+  { num: 3, key: "alcancePopulacional", title: "Alcance Populacional", question: "Avalie o tamanho do público beneficiado e o impacto que a iniciativa pode gerar na vida das pessoas.", color: "#6B4FA0" },
+  { num: 4, key: "alcanceTerritorial", title: "Alcance Territorial", question: "Avalie a abrangência territorial e a capacidade de chegar a diferentes regiões e municípios.", color: "#3E7C4A" },
+];
+const TECH_WEIGHT_BY_KEY = Object.fromEntries(TECH_CRITERIA.map(c => [c.key, c.weight]));
+const POL_WEIGHT_BY_KEY = Object.fromEntries(POL_CRITERIA.map(c => [c.key, c.weight]));
+
+
+function zoneOf(v) {
+  if (v >= 7) return "alta";
+  if (v >= 5) return "media";
+  return "baixa";
+}
+function zoneLabel(z) {
+  return z === "alta" ? "Alta" : z === "media" ? "Média" : "Baixa";
+}
+function weightedScore(values, criteria) {
+  let sum = 0;
+  criteria.forEach(c => { sum += (values[c.key] ?? 5) * c.weight; });
+  return sum / 100;
+}
+function defaultScores(criteria) {
+  const o = {};
+  criteria.forEach(c => o[c.key] = 6);
+  return o;
+}
+
+/* ============ STORAGE HELPERS ============ */
+async function storageGet(key) {
+  try {
+    const r = await window.storage.get(key, true);
+    return r ? JSON.parse(r.value) : null;
+  } catch (e) { return null; }
+}
+async function storageSet(key, value) {
+  try { await window.storage.set(key, JSON.stringify(value), true); } catch (e) { console.error(e); }
+}
+
+/* Busca as propostas do arquivo propostas.json em vez de tê-las fixas no código. */
+async function fetchProposals() {
+  try {
+    const res = await fetch(DATA_URL);
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const data = await res.json();
+    return { data, error: null };
+  } catch (e) {
+    return { data: [], error: e.message || "Falha ao buscar propostas.json." };
+  }
+}
+
+function App() {
+  const [ready, setReady] = useState(false);
+  const [dataError, setDataError] = useState(null);
+  const [PROPOSALS, setPROPOSALS] = useState([]);
+  const [tab, setTab] = useState("avaliar"); // avaliar | rank
+  const [nameInput, setNameInput] = useState("");
+  const [orgInput, setOrgInput] = useState("");
+  const [nameTouched, setNameTouched] = useState(false);
+  const [allEvals, setAllEvals] = useState({}); // { proposalId: { evaluatorName: {tech:{}, pol:{}} } }
+  const [currentIdx, setCurrentIdx] = useState(0);
+  const [techVals, setTechVals] = useState(defaultScores(TECH_CRITERIA));
+  const [polVals, setPolVals] = useState(defaultScores(POL_CRITERIA));
+  const [saving, setSaving] = useState(false);
+
+  const evaluatorName = nameInput.trim();
+
+  useEffect(() => {
+    (async () => {
+      const [evalData, propsResult] = await Promise.all([
+        storageGet("avsc:evaluations"),
+        fetchProposals(),
+      ]);
+      setAllEvals(evalData || {});
+      setPROPOSALS(propsResult.data || []);
+      setDataError(propsResult.error);
+      setReady(true);
+    })();
+  }, []);
+
+  const myDoneIds = useMemo(() => {
+    if (!evaluatorName) return new Set();
+    const s = new Set();
+    Object.entries(allEvals).forEach(([pid, evaluators]) => {
+      if (evaluators[evaluatorName]) s.add(pid);
+    });
+    return s;
+  }, [allEvals, evaluatorName]);
+
+  const nextPendingIdx = useMemo(() => {
+    for (let i = 0; i < PROPOSALS.length; i++) {
+      if (!myDoneIds.has(PROPOSALS[i].id)) return i;
+    }
+    return -1;
+  }, [myDoneIds]);
+
+  // whenever the evaluator name changes, jump to their first pending proposal
+  // and load whatever they may have already saved for the current proposal
+  useEffect(() => {
+    if (!ready) return;
+    const idx = nextPendingIdx === -1 ? Math.max(0, PROPOSALS.length - 1) : nextPendingIdx;
+    setCurrentIdx(idx);
+    loadCriteriaFor(idx);
+    // eslint-disable-next-line
+  }, [evaluatorName, ready]);
+
+  function loadCriteriaFor(idx) {
+    const pid = PROPOSALS[idx].id;
+    const existing = evaluatorName && allEvals[pid] && allEvals[pid][evaluatorName];
+    setTechVals(existing ? existing.tech : defaultScores(TECH_CRITERIA));
+    setPolVals(existing ? existing.pol : defaultScores(POL_CRITERIA));
+  }
+
+  const proposal = PROPOSALS[currentIdx];
+
+  const techScore = useMemo(() => weightedScore(techVals, TECH_CRITERIA), [techVals]);
+  const polScore = useMemo(() => weightedScore(polVals, POL_CRITERIA), [polVals]);
+  const finalScore = useMemo(() => (techScore * 2 + polScore * 3) / 5, [techScore, polScore]);
+  const finalZone = zoneOf(finalScore);
+
+  async function saveAndNext() {
+    if (!evaluatorName) { setNameTouched(true); return; }
+    setSaving(true);
+    const pid = proposal.id;
+    const updated = { ...allEvals };
+    updated[pid] = { ...(updated[pid] || {}) };
+    updated[pid][evaluatorName] = {
+      tech: techVals, pol: polVals,
+      org: orgInput || null,
+      ts: new Date().toISOString(),
+    };
+    await storageSet("avsc:evaluations", updated);
+    setAllEvals(updated);
+
+    // find next pending for this evaluator
+    let nextIdx = -1;
+    for (let i = 0; i < PROPOSALS.length; i++) {
+      const evals = updated[PROPOSALS[i].id];
+      if (!evals || !evals[evaluatorName]) { nextIdx = i; break; }
+    }
+    setSaving(false);
+    if (nextIdx === -1) { setCurrentIdx(PROPOSALS.length - 1); }
+    else {
+      setCurrentIdx(nextIdx);
+      const pid2 = PROPOSALS[nextIdx].id;
+      const existing = updated[pid2] && updated[pid2][evaluatorName];
+      setTechVals(existing ? existing.tech : defaultScores(TECH_CRITERIA));
+      setPolVals(existing ? existing.pol : defaultScores(POL_CRITERIA));
+    }
+  }
+
+  function jumpTo(idx) {
+    setCurrentIdx(idx);
+    loadCriteriaFor(idx);
+    setTab("avaliar");
+  }
+
+  const doneCount = myDoneIds.size;
+  const totalCount = PROPOSALS.length;
+
+  /* ---------- ranking data ---------- */
+  const rankingRows = useMemo(() => {
+    return PROPOSALS.map(p => {
+      const evaluators = allEvals[p.id] || {};
+      const names = Object.keys(evaluators);
+      if (names.length === 0) {
+        return { proposal: p, nEval: 0, tech: null, pol: null, final: null, zone: null };
+      }
+      let techSum = 0, polSum = 0;
+      names.forEach(n => {
+        techSum += weightedScore(evaluators[n].tech, TECH_CRITERIA);
+        polSum += weightedScore(evaluators[n].pol, POL_CRITERIA);
+      });
+      const techAvg = techSum / names.length;
+      const polAvg = polSum / names.length;
+      const finalAvg = (techAvg * 2 + polAvg * 3) / 5;
+      return { proposal: p, nEval: names.length, tech: techAvg, pol: polAvg, final: finalAvg, zone: zoneOf(finalAvg) };
+    }).sort((a, b) => (b.final ?? -1) - (a.final ?? -1));
+  }, [allEvals]);
+
+  if (!ready) {
+    return <div style={{padding: 60, textAlign: "center", color: "var(--ink-soft)"}}>Carregando…</div>;
+  }
+
+  const allDone = evaluatorName && nextPendingIdx === -1;
+
+  return (
+    <div className="avsc-shell">
+      <div className="avsc-topbar">
+        <div className="avsc-brand">
+          <span className="mark">AVANÇA SC</span>
+          <div>
+            <h1 className="serif">Avaliação de Propostas Estruturantes</h1>
+            <div className="sub">Etapas 4 e 5 da metodologia · Classificação Técnica e Política</div>
+          </div>
+        </div>
+        <div className="avsc-id-box">
+          <div className="avsc-id-field">
+            <label>Nome completo</label>
+            <input
+              className={nameTouched && !evaluatorName ? "warn" : ""}
+              value={nameInput}
+              onChange={e => { setNameInput(e.target.value); setNameTouched(false); }}
+              placeholder="Ex: Maria Silva" />
+            {nameTouched && !evaluatorName && <div className="avsc-id-warn">Informe seu nome para salvar avaliações.</div>}
+          </div>
+          <div className="avsc-id-field">
+            <label>Órgão / área (opcional)</label>
+            <input value={orgInput} onChange={e => setOrgInput(e.target.value)} placeholder="Ex: Casa Civil" />
+          </div>
+        </div>
+      </div>
+      <hr className="avsc-hr" />
+
+      {dataError && (
+        <div className="avsc-connbanner">
+          <b>Não foi possível carregar as propostas.</b> Confira se o arquivo propostas.json está na
+          mesma pasta deste index.html no repositório. Detalhe técnico: {dataError}
+        </div>
+      )}
+
+      <div className="avsc-box">
+        <div className="avsc-box-head">
+          <div className="avsc-tabs">
+            <button className={"avsc-tab " + (tab === "avaliar" ? "active" : "")} onClick={() => setTab("avaliar")}>Avaliar</button>
+            <button className={"avsc-tab " + (tab === "rank" ? "active" : "")} onClick={() => setTab("rank")}>Ranking consolidado</button>
+          </div>
+          {tab === "avaliar" && evaluatorName && (
+            <span style={{fontSize: 12, color: "var(--ink-soft)"}}>
+              {doneCount} de {totalCount} avaliadas por {evaluatorName}
+            </span>
+          )}
+        </div>
+
+        {tab === "avaliar" && PROPOSALS.length === 0 && !dataError && (
+          <div className="avsc-empty-note">Nenhuma proposta retornada pelo Worker.</div>
+        )}
+
+        {tab === "avaliar" && !allDone && proposal && (
+          <React.Fragment>
+            <div className="avsc-progress-wrap">
+              <div className="avsc-progress-top">
+                <span>Proposta {currentIdx + 1} de {totalCount}</span>
+                <span>{Math.round((doneCount/totalCount)*100)}%</span>
+              </div>
+              <div className="avsc-progress-bar"><div className="avsc-progress-fill" style={{width: `${(doneCount/totalCount)*100}%`}}></div></div>
+              <div className="avsc-dots">
+                {PROPOSALS.map((p, i) => (
+                  <div key={p.id}
+                       className={"avsc-dot " + (i === currentIdx ? "current" : myDoneIds.has(p.id) ? "done" : "")}
+                       onClick={() => jumpTo(i)} title={p.titulo}>
+                    {myDoneIds.has(p.id) && i !== currentIdx ? "✓" : p.numero}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <div className="avsc-dossier-head">
+                <div className="num">PROPOSTA Nº {proposal.numero}</div>
+                <h2 className="serif">{proposal.titulo}</h2>
+                <div className="avsc-meta-row">
+                  <span><b>Órgão:</b> {proposal.orgao}</span>
+                  <span><b>Responsável:</b> {proposal.responsavel}</span>
+                  <span className="avsc-pill">{proposal.horizonte}</span>
+                </div>
+              </div>
+
+              <div className="avsc-canvas-title">
+                <h3>Canvas Estratégico</h3>
+                <span className="tag">Propostas de Políticas e Iniciativas Estruturantes</span>
+              </div>
+              <p className="avsc-canvas-sub">Ferramenta para estruturação e classificação técnica da proposta.</p>
+
+              <div className="avsc-canvasgrid">
+                {CANVAS_TILES.map(t => {
+                  const content = t.key === "__horizonte" ? proposal.horizonte : proposal.canvas[t.key];
+                  const weight = TECH_WEIGHT_BY_KEY[t.key];
+                  const current = techVals[t.key];
+                  return (
+                    <div className="avsc-tile" key={t.num}>
+                      <div className="avsc-tile-head" style={{background: t.color}}>
+                        <div className="avsc-tile-num">{t.num}</div>
+                        <div className="avsc-tile-title">{t.title}</div>
+                      </div>
+                      <div className="avsc-tile-body">
+                        <p className="avsc-tile-q">{t.question}</p>
+                        <p className="avsc-tile-text">{content}</p>
+                        {t.scored ? (
+                          <div className="avsc-tile-classify">
+                            <div className="avsc-tile-classify-top">
+                              <span className="avsc-tile-classify-label">Classificação</span>
+                              <span className="avsc-tile-weight">peso {weight}%</span>
+                            </div>
+                            <div className="avsc-chip-row">
+                              {[["Baixa", 3, "baixa"], ["Média", 6, "media"], ["Alta", 9, "alta"]].map(([lbl, val, zone]) => (
+                                <div key={val}
+                                     className={"avsc-chip " + zone + (current === val ? " selected" : "")}
+                                     onClick={() => setTechVals({...techVals, [t.key]: val})}>
+                                  {lbl}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="avsc-tile-noscore">Campo de contexto — não pontuado na matriz técnica.</div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="avsc-canvas-title">
+                <h3>Avaliação Política</h3>
+                <span className="tag">Sustentação política, institucional e social</span>
+              </div>
+              <p className="avsc-canvas-sub">Priorização do que realmente importa para Santa Catarina.</p>
+
+              <div className="avsc-polgrid">
+                {POL_TILES.map(t => {
+                  const content = proposal.politica_texto[t.key];
+                  const weight = POL_WEIGHT_BY_KEY[t.key];
+                  const current = polVals[t.key];
+                  return (
+                    <div className="avsc-tile" key={t.num}>
+                      <div className="avsc-tile-head" style={{background: t.color}}>
+                        <div className="avsc-tile-num">{t.num}</div>
+                        <div className="avsc-tile-title">{t.title}</div>
+                      </div>
+                      <div className="avsc-tile-body">
+                        <p className="avsc-tile-q">{t.question}</p>
+                        <p className="avsc-tile-text">{content}</p>
+                        <div className="avsc-tile-classify">
+                          <div className="avsc-tile-classify-top">
+                            <span className="avsc-tile-classify-label">Classificação</span>
+                            <span className="avsc-tile-weight">peso {weight}%</span>
+                          </div>
+                          <div className="avsc-chip-row">
+                            {[["Baixa", 3, "baixa"], ["Média", 6, "media"], ["Alta", 9, "alta"]].map(([lbl, val, zone]) => (
+                              <div key={val}
+                                   className={"avsc-chip " + zone + (current === val ? " selected" : "")}
+                                   onClick={() => setPolVals({...polVals, [t.key]: val})}>
+                                {lbl}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="avsc-scorebar">
+                <div className="scores">
+                  <div><b>{techScore.toFixed(1)}</b><span className="lbl">Técnica</span></div>
+                  <div><b>{polScore.toFixed(1)}</b><span className="lbl">Política</span></div>
+                  <div><b>{finalScore.toFixed(1)}</b><span className="lbl">Final</span></div>
+                  <span className={"avsc-stamp-mini " + finalZone}>{zoneLabel(finalZone)}</span>
+                </div>
+                <div className="avsc-scorebar-actions">
+                  <button className="savebtn" disabled={saving} onClick={saveAndNext}>
+                    {saving ? "Salvando…" : "Salvar e ir para a próxima →"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </React.Fragment>
+        )}
+
+        {tab === "avaliar" && allDone && (
+          <div className="avsc-done-screen" style={{border: "none", padding: "50px 20px"}}>
+            <div className="big serif">Você avaliou as {totalCount} propostas de exemplo</div>
+            <p>Obrigado, {evaluatorName}. Veja o ranking consolidado com as notas de todos os avaliadores, ou revise suas próprias notas.</p>
+            <div style={{display: "flex", gap: 10, justifyContent: "center"}}>
+              <button className="avsc-btn ghost" onClick={() => jumpTo(0)}>Revisar avaliações</button>
+              <button className="avsc-btn" onClick={() => setTab("rank")}>Ver ranking consolidado →</button>
+            </div>
+          </div>
+        )}
+
+        {tab === "rank" && (
+          <table className="avsc-rank-table">
+            <thead>
+              <tr>
+                <th>#</th><th>Proposta</th><th>Órgão</th><th>Avaliadores</th>
+                <th>Nota técnica</th><th>Nota política</th><th>Nota final</th><th>Prioridade</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rankingRows.map((r, i) => (
+                <tr key={r.proposal.id}>
+                  <td>{i + 1}</td>
+                  <td style={{maxWidth: 260}}>{r.proposal.titulo}</td>
+                  <td>{r.proposal.orgao}</td>
+                  <td>{r.nEval}</td>
+                  <td>{r.tech !== null ? r.tech.toFixed(1) : "—"}</td>
+                  <td>{r.pol !== null ? r.pol.toFixed(1) : "—"}</td>
+                  <td>{r.final !== null ? <b>{r.final.toFixed(1)}</b> : "—"}</td>
+                  <td>{r.zone ? <span className={"avsc-badge " + r.zone}>{zoneLabel(r.zone)}</span> : <span className="avsc-badge pendente">Pendente</span>}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('avsc-root')).render(<App />);
+</script>
+
+</body>
+</html>

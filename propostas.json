@@ -1,0 +1,127 @@
+[
+  {
+    "id": "p1",
+    "numero": 1,
+    "titulo": "Fortalecimento da Educação Especial e Inclusiva",
+    "orgao": "Educação Especial",
+    "responsavel": "Jeane Rauh Probst Leite",
+    "horizonte": "Médio Prazo (3 - 6 anos)",
+    "canvas": {
+      "desafio": "Aumento expressivo no número de diagnósticos; falta de profissionais com formação na área e qualificados; barreiras arquitetônicas (acessibilidade).",
+      "visao": "Fortalecimento da rede de inclusão entre estado e municípios; garantia de acesso, aprendizagem e permanência de alunos com deficiência nas diferentes redes; programa de formação continuada aos profissionais da educação; implementação e ampliação de serviços em educação especial nas diferentes redes.",
+      "iniciativa": "Parceria com os municípios; criação de fluxos intersetoriais de atendimento especializado; estabelecimento de parcerias para a formação de professores, estimado em R$ 3 milhões/ano.",
+      "impacto": "Aumento da governança estabelecendo a interface entre município e estado; melhora do atendimento especializado nos municípios, gerando igualdade e desenvolvimento social; garantia do direito à educação.",
+      "transversalidade": "FCEE; Municípios; FECAM; e UNDIME.",
+      "beneficiarios": "Famílias e crianças com diagnóstico de deficiência e transtornos.",
+      "maturidade": "Estudos e projetos já existentes.",
+      "resiliencia": "Estimula a oferta da educação especial, além de potencializar os recursos já aplicados.",
+      "legado": "Efetivação da Política da Primeira Infância na perspectiva da educação inclusiva."
+    },
+    "politica_texto": {
+      "aprovacaoPopular": "Muito alto potencial, pois atende diretamente as famílias e as crianças com diagnóstico de deficiência atendidas nas diferentes redes.",
+      "visibilidade": "Muito alto potencial, pois fortalece a parceria do governo com os municípios.",
+      "alcancePopulacional": "Muito alto potencial, pois impacta direta e indiretamente cerca de 300 mil pessoas.",
+      "alcanceTerritorial": "Muito alto potencial, pois alcança os 295 municípios direta ou indiretamente."
+    }
+  },
+  {
+    "id": "p2",
+    "numero": 2,
+    "titulo": "Ampliação de tecnologias assistivas e pesquisas em educação especial",
+    "orgao": "Educação Especial",
+    "responsavel": "Jeane Rauh Probst Leite",
+    "horizonte": "Longo Prazo (2027 - 2030+)",
+    "canvas": {
+      "desafio": "Desconhecimento das tecnologias e baixa oferta de recursos de tecnologia assistiva; dificuldade de acesso das famílias às tecnologias assistivas; baixa intersetorialidade das pesquisas em tecnologia assistiva e em educação especial.",
+      "visao": "Maior divulgação das pesquisas em desenvolvimento; investimento na compra de recursos de tecnologia assistiva; ampliar a facilidade de acesso à tecnologia assistiva pelas famílias; incentivo a pesquisadores para o desenvolvimento de projetos inovadores.",
+      "iniciativa": "Investimento na aquisição de novas tecnologias; fortalecimento e ampliação de parcerias; promoção do acesso às tecnologias assistivas por parte dos catarinenses com deficiência.",
+      "impacto": "Governança; desenvolvimento tecnológico; promoção e desenvolvimento social.",
+      "transversalidade": "Municípios, instituições conveniadas, universidades e FAPESC.",
+      "beneficiarios": "Famílias e pessoas com deficiência.",
+      "maturidade": "Estudos e projetos já existentes.",
+      "resiliencia": "Promove o acesso a tecnologias assistivas e amplia a autonomia de seus usuários.",
+      "legado": "Um estado mais inclusivo."
+    },
+    "politica_texto": {
+      "aprovacaoPopular": "Muito alto, pois atende as famílias das pessoas com deficiência.",
+      "visibilidade": "Muito alto, pois impacta direta e indiretamente na vida das pessoas nos 295 municípios.",
+      "alcancePopulacional": "Muito alto, pois impacta direta e indiretamente aproximadamente 300 mil pessoas segundo Censo de 2022.",
+      "alcanceTerritorial": "Muito alto, pois impacta direta e indiretamente na vida das pessoas nos 295 municípios."
+    }
+  },
+  {
+    "id": "p3",
+    "numero": 3,
+    "titulo": "Aprimorar a intersetorialidade do atendimento (diagnóstico, estimulação e reabilitação) de pessoas com deficiência e transtornos",
+    "orgao": "Educação Especial",
+    "responsavel": "Jeane Rauh Probst Leite",
+    "horizonte": "Médio Prazo (3 - 6 anos)",
+    "canvas": {
+      "desafio": "Duplicidade de atendimento; dificuldade dos fluxos em diferentes atendimentos; ausência de sistema único de acesso aos serviços; fragmentação dos esforços nas diferentes instituições e esferas.",
+      "visao": "Ampliar e unificar a oferta de serviços.",
+      "iniciativa": "Integração de fluxos de diagnóstico, estimulação e reabilitação entre as redes envolvidas, com sistema único de acompanhamento.",
+      "impacto": "Redução da duplicidade de atendimentos e maior eficiência no uso dos recursos públicos; atendimento mais ágil às famílias.",
+      "transversalidade": "FCEE, Saúde, Assistência Social e municípios.",
+      "beneficiarios": "Pessoas com deficiência e transtornos e seus familiares em todo o Estado.",
+      "maturidade": "Em fase de estruturação institucional.",
+      "resiliencia": "Fortalece a capacidade de resposta da rede pública diante do aumento da demanda.",
+      "legado": "Consolidação de um sistema único e permanente de atendimento intersetorial."
+    },
+    "politica_texto": {
+      "aprovacaoPopular": "Alto potencial, por reduzir a burocracia percebida pelas famílias no acesso aos serviços.",
+      "visibilidade": "Médio potencial, por ser uma mudança majoritariamente de processo, menos visível fisicamente.",
+      "alcancePopulacional": "Alto, por atender diretamente famílias em situação de vulnerabilidade em todo o Estado.",
+      "alcanceTerritorial": "Alto, por envolver a rede de atendimento presente em todo o território catarinense."
+    }
+  },
+  {
+    "id": "p4",
+    "numero": 4,
+    "titulo": "Consolidar o repasse financeiro às instituições especializadas por meio de uma Política de Estado",
+    "orgao": "FCEE - Educação Especial",
+    "responsavel": "Jeane Rauh Probst Leite",
+    "horizonte": "Curto Prazo (1 - 2 anos)",
+    "canvas": {
+      "desafio": "Insegurança jurídica, pois a atual política está consignada em decreto; falta de previsibilidade administrativa e financeira; ampliação necessária dos mecanismos de transparência e controle da aplicação dos recursos. O estado não possui estrutura física e humana para atendimento dos 32 mil educandos absorvidos pela rede parceira.",
+      "visao": "Consolidar a imagem de um estado inovador na aplicação de recursos em instituições especializadas em educação especial; fortalecimento do desenvolvimento social por meio do atendimento ao público em educação especial pelo terceiro setor.",
+      "iniciativa": "Consolidar a política por meio de projeto de lei; reforço dos mecanismos de governança da política pública.",
+      "impacto": "Consolidação do atendimento em educação especial no território catarinense.",
+      "transversalidade": "FCEE, ALESC, SEF e instituições conveniadas.",
+      "beneficiarios": "Pessoas com deficiências e transtorno e seus familiares — aproximadamente 32 mil educandos.",
+      "maturidade": "Em execução, porém apenas por meio de decreto.",
+      "resiliencia": "Amplia a segurança jurídica da manutenção do atendimento educacional especializado, por meio da rede conveniada.",
+      "legado": "Segurança jurídica da manutenção do atendimento educacional especializado; consolidação da Política de Educação Especial."
+    },
+    "politica_texto": {
+      "aprovacaoPopular": "Muito alto, pois a rede atua em todo o território catarinense.",
+      "visibilidade": "Muito alto, pois a rede atua em todo o território catarinense, atendendo diferentes públicos e faixas etárias.",
+      "alcancePopulacional": "Muito alto — hoje a rede atende aproximadamente 32 mil educandos.",
+      "alcanceTerritorial": "Muito alto, pois a rede atua em todo o território catarinense."
+    }
+  },
+  {
+    "id": "p5",
+    "numero": 6,
+    "titulo": "MotoHub SC – Rede Catarinense de Apoio ao Motociclista Profissional",
+    "orgao": "Departamento Estadual de Trânsito (DETRAN)",
+    "responsavel": "Ricardo Miranda Aversa",
+    "horizonte": "Curto, médio e longo prazo (implantação gradual)",
+    "canvas": {
+      "desafio": "O crescimento acelerado da utilização de motocicletas para atividades profissionais não foi acompanhado pela criação de infraestrutura pública adequada. Milhares de motociclistas trabalham diariamente sem locais seguros para descanso, hidratação e apoio.",
+      "visao": "Tornar Santa Catarina referência nacional em infraestrutura pública de apoio ao motociclista profissional, por meio de uma rede estadual integrada, presente em todas as regiões do Estado.",
+      "iniciativa": "Instituir o Programa MotoHub SC, rede estadual de pontos de apoio em parceria com os municípios, mediante financiamento do DETRAN/SC, diretrizes técnicas padronizadas e análise técnica dos projetos pela SEA e SIE.",
+      "impacto": "Implantação de uma rede estadual de apoio ao motociclista profissional; fortalecimento das políticas de segurança viária; melhoria das condições de trabalho; consolidação de política pública permanente.",
+      "transversalidade": "DETRAN/SC (coordenação), SEA (análise técnica), SIE (casos complexos), municípios (implantação e manutenção), FECAM.",
+      "beneficiarios": "Motociclistas profissionais, motofretistas, entregadores, mototaxistas e a população catarinense em geral.",
+      "maturidade": "Elevada viabilidade institucional, podendo ser implementada por meio de programa estadual e chamamento público aos municípios.",
+      "resiliencia": "Incentiva estruturas com critérios de sustentabilidade, acessibilidade e adaptação climática, incluindo soluções de energia solar e recarga de motos elétricas.",
+      "legado": "Primeira política pública estadual permanente voltada à infraestrutura de apoio ao motociclista profissional."
+    },
+    "politica_texto": {
+      "aprovacaoPopular": "Alto potencial, por promover melhores condições de trabalho aos motociclistas profissionais e fortalecer a segurança viária.",
+      "visibilidade": "Alta visibilidade, por meio de unidades padronizadas e identificadas com a marca MotoHub SC em diversas regiões do Estado.",
+      "alcancePopulacional": "Beneficia diretamente motociclistas profissionais e impacta positivamente empresas, comerciantes e consumidores.",
+      "alcanceTerritorial": "Alcance estadual, com implantação gradual em parceria com os municípios em todas as regiões."
+    }
+  }
+]
