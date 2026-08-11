@@ -59,6 +59,26 @@
   .avsc-id-field input::placeholder { color: #A7AC9B; }
   .avsc-id-field input:focus { outline: 2px solid var(--green); outline-offset: 1px; border-color: var(--green); }
   .avsc-id-field input.warn { border-color: var(--red); }
+  .avsc-id-static {
+    padding: 8px 0 2px; font-size: 14px; font-weight: 700; color: var(--ink);
+  }
+  .avsc-id-logout { display: flex; flex-direction: column; justify-content: flex-end; }
+  .avsc-id-logout .avsc-btn { padding: 8px 14px; font-size: 12.5px; }
+
+  .avsc-login-gate {
+    max-width: 420px; margin: 10vh auto; background: var(--panel); border: 1px solid var(--line);
+    border-radius: 10px; padding: 38px 34px; box-shadow: 0 1px 3px rgba(28,43,34,.06);
+  }
+  .avsc-login-eyebrow {
+    font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--green);
+    font-weight: 700; margin-bottom: 10px;
+  }
+  .avsc-login-gate h2 { font-family: 'Fraunces', serif; font-size: 22px; margin: 0 0 8px; line-height: 1.25; }
+  .avsc-login-desc { font-size: 13px; color: var(--ink-soft); margin: 0 0 22px; line-height: 1.5; }
+  .avsc-login-error {
+    background: var(--red-soft); color: var(--red); border: 1px solid var(--red); border-radius: 6px;
+    padding: 9px 12px; font-size: 12.5px; margin-bottom: 14px;
+  }
   .avsc-id-warn { font-size: 10.5px; color: var(--red); margin-top: 4px; }
 
   .avsc-hr { border: none; border-top: 2px solid var(--ink); margin: 16px 0 22px; }
@@ -297,6 +317,19 @@ const { useState, useEffect, useMemo, useCallback } = React;
    ================================================================ */
 const DATA_URL = "propostas.json";
 
+/* ================================================================
+   CONFIGURAÇÃO — usuários com acesso (login simples, e-mail + senha)
+   IMPORTANTE: isto é uma barreira de cortesia, não segurança real —
+   qualquer pessoa que abrir "Ver código-fonte" desta página vê essa
+   lista. Não use senhas sensíveis aqui. Para adicionar mais gente,
+   copie uma linha e edite email/senha/nome.
+   ================================================================ */
+const USERS = [
+  { email: "avaliador1@sc.gov.br", password: "tech26", name: "Avaliador 1" },
+  { email: "avaliador2@sc.gov.br", password: "tech26", name: "Avaliador 2" },
+  { email: "avaliador3@sc.gov.br", password: "tech26", name: "Avaliador 3" },
+];
+
 const TECH_CRITERIA = [
   { key: "beneficiarios", label: "Beneficiários Estratégicos", weight: 20 },
   { key: "impacto", label: "Impacto Esperado", weight: 20 },
@@ -396,21 +429,19 @@ async function fetchProposals() {
   }
 }
 
-function App() {
+function App({ loggedUser, onLogout }) {
   const [ready, setReady] = useState(false);
   const [dataError, setDataError] = useState(null);
   const [PROPOSALS, setPROPOSALS] = useState([]);
   const [tab, setTab] = useState("avaliar"); // avaliar | rank
-  const [nameInput, setNameInput] = useState("");
   const [orgInput, setOrgInput] = useState("");
-  const [nameTouched, setNameTouched] = useState(false);
   const [allEvals, setAllEvals] = useState({}); // { proposalId: { evaluatorName: {tech:{}, pol:{}} } }
   const [currentIdx, setCurrentIdx] = useState(0);
   const [techVals, setTechVals] = useState(defaultScores(TECH_CRITERIA));
   const [polVals, setPolVals] = useState(defaultScores(POL_CRITERIA));
   const [saving, setSaving] = useState(false);
 
-  const evaluatorName = nameInput.trim();
+  const evaluatorName = loggedUser.name;
 
   useEffect(() => {
     (async () => {
@@ -466,7 +497,6 @@ function App() {
   const finalZone = zoneOf(finalScore);
 
   async function saveAndNext() {
-    if (!evaluatorName) { setNameTouched(true); return; }
     setSaving(true);
     const pid = proposal.id;
     const updated = { ...allEvals };
@@ -535,7 +565,6 @@ function App() {
     <div className="avsc-shell">
       <div className="avsc-topbar">
         <div className="avsc-brand">
-          <span className="mark">AVANÇA SC</span>
           <div>
             <h1 className="serif">Avaliação de Propostas Estruturantes</h1>
             <div className="sub">Etapas 4 e 5 da metodologia · Classificação Técnica e Política</div>
@@ -543,17 +572,16 @@ function App() {
         </div>
         <div className="avsc-id-box">
           <div className="avsc-id-field">
-            <label>Nome completo</label>
-            <input
-              className={nameTouched && !evaluatorName ? "warn" : ""}
-              value={nameInput}
-              onChange={e => { setNameInput(e.target.value); setNameTouched(false); }}
-              placeholder="Ex: Maria Silva" />
-            {nameTouched && !evaluatorName && <div className="avsc-id-warn">Informe seu nome para salvar avaliações.</div>}
+            <label>Avaliador</label>
+            <div className="avsc-id-static">{loggedUser.name}</div>
           </div>
           <div className="avsc-id-field">
             <label>Órgão / área (opcional)</label>
             <input value={orgInput} onChange={e => setOrgInput(e.target.value)} placeholder="Ex: Casa Civil" />
+          </div>
+          <div className="avsc-id-field avsc-id-logout">
+            <label>&nbsp;</label>
+            <button className="avsc-btn ghost" onClick={onLogout}>Sair</button>
           </div>
         </div>
       </div>
@@ -756,7 +784,76 @@ function App() {
   );
 }
 
-ReactDOM.createRoot(document.getElementById('avsc-root')).render(<App />);
+/* ================================================================
+   LOGIN — barreira simples de e-mail + senha (ver USERS no topo)
+   ================================================================ */
+function Login({ onSuccess }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    const match = USERS.find(
+      u => u.email.trim().toLowerCase() === email.trim().toLowerCase() && u.password === password
+    );
+    if (!match) {
+      setError("E-mail ou senha inválidos.");
+      return;
+    }
+    sessionStorage.setItem("avsc_user", JSON.stringify({ email: match.email, name: match.name }));
+    onSuccess(match);
+  }
+
+  return (
+    <div className="avsc-shell">
+      <div className="avsc-login-gate">
+        <div className="avsc-login-eyebrow">Acesso restrito</div>
+        <h2 className="serif">Avaliação de Propostas Estruturantes</h2>
+        <p className="avsc-login-desc">Entre com o e-mail e a senha que foram compartilhados com você.</p>
+        <form onSubmit={handleSubmit}>
+          <div className="avsc-field">
+            <label>E-mail</label>
+            <input type="email" value={email} onChange={e => setEmail(e.target.value)}
+                   placeholder="seuemail@sc.gov.br" autoFocus />
+          </div>
+          <div className="avsc-field">
+            <label>Senha</label>
+            <input type="password" value={password} onChange={e => setPassword(e.target.value)}
+                   placeholder="••••••••" />
+          </div>
+          {error && <div className="avsc-login-error">{error}</div>}
+          <button type="submit" className="avsc-btn wide">Entrar →</button>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+function Gate() {
+  const [user, setUser] = useState(undefined); // undefined = checking, null = logged out, object = logged in
+
+  useEffect(() => {
+    try {
+      const raw = sessionStorage.getItem("avsc_user");
+      setUser(raw ? JSON.parse(raw) : null);
+    } catch (e) {
+      setUser(null);
+    }
+  }, []);
+
+  if (user === undefined) return null;
+  if (!user) return <Login onSuccess={setUser} />;
+
+  function handleLogout() {
+    sessionStorage.removeItem("avsc_user");
+    setUser(null);
+  }
+
+  return <App loggedUser={user} onLogout={handleLogout} />;
+}
+
+ReactDOM.createRoot(document.getElementById('avsc-root')).render(<Gate />);
 </script>
 
 </body>
